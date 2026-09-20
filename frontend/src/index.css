@@ -1,0 +1,324 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* -------------------------------------------------------------
+   Design tokens. Each token is a CSS variable so it can flip
+   between themes at runtime. Tailwind v4 utilities reference
+   these via the @theme block below.
+   ------------------------------------------------------------- */
+
+:root {
+  /* Surfaces */
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --elevated: #ffffff;
+  --muted: #f1f5f9;
+
+  /* Foreground */
+  --fg: #0f172a;
+  --fg-muted: #475569;
+  --fg-subtle: #64748b;
+
+  /* Lines */
+  --line: #e5e7eb;
+  --line-strong: #d1d5db;
+
+  /* Brand — pink → purple */
+  --brand-50: #fdf4ff;
+  --brand-100: #fae8ff;
+  --brand-500: #e879f9;
+  --brand-600: #d946ef;
+  --brand-700: #c026d3;
+  --brand-fg: #ffffff;
+  --brand-cta-start: #ff9ed6;
+  --brand-cta-end: #c9a3fb;
+
+  /* Status */
+  --success: #10b981;
+  --success-soft: #d1fae5;
+  --success-soft-fg: #047857;
+  --warning: #f59e0b;
+  --warning-soft: #fef3c7;
+  --warning-soft-fg: #92400e;
+  --danger: #dc2626;
+  --danger-soft: #fee2e2;
+  --danger-soft-fg: #b91c1c;
+  --accent-soft: #f3e8ff;
+  --accent-soft-fg: #7e22ce;
+
+  /* Effects */
+  --ring: #d946ef;
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04);
+  --shadow-pop: 0 10px 30px -12px rgba(15, 23, 42, 0.18);
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #09090b;
+  --surface: #131316;
+  --elevated: #1a1a1f;
+  --muted: #1f1f24;
+
+  --fg: #fafafa;
+  --fg-muted: #d4d4d8;
+  --fg-subtle: #a1a1aa;
+
+  --line: #27272a;
+  --line-strong: #3f3f46;
+
+  --brand-50: rgba(232, 121, 249, 0.16);
+  --brand-100: rgba(232, 121, 249, 0.28);
+  --brand-500: #f5d0fe;
+  --brand-600: #f0abfc;
+  --brand-700: #f9d5ff;
+  --brand-fg: #1a0620;
+  --brand-cta-start: #ffb3e0;
+  --brand-cta-end: #d8bcfd;
+
+  --success: #34d399;
+  --success-soft: rgba(16, 185, 129, 0.18);
+  --success-soft-fg: #6ee7b7;
+  --warning: #fbbf24;
+  --warning-soft: rgba(245, 158, 11, 0.18);
+  --warning-soft-fg: #fcd34d;
+  --danger: #f87171;
+  --danger-soft: rgba(220, 38, 38, 0.22);
+  --danger-soft-fg: #fca5a5;
+  --accent-soft: rgba(168, 85, 247, 0.2);
+  --accent-soft-fg: #d8b4fe;
+
+  --ring: #f5d0fe;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-pop: 0 12px 32px -12px rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-elevated: var(--elevated);
+  --color-muted: var(--muted);
+
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-fg: var(--brand-fg);
+
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-success-soft-fg: var(--success-soft-fg);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-warning-soft-fg: var(--warning-soft-fg);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-soft-fg: var(--danger-soft-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-soft-fg: var(--accent-soft-fg);
+}
+
+/* Primary CTA buttons: render the solid `bg-brand-600` utility as a
+   soft pink → purple gradient instead, matching the course modules'
+   button style. Overridden here (after Tailwind's generated utility)
+   rather than in every button's className. */
+.bg-brand-600 {
+  background-image: linear-gradient(135deg, var(--brand-cta-start) 0%, var(--brand-cta-end) 100%);
+}
+.hover\:bg-brand-700:hover {
+  background-image: linear-gradient(135deg, var(--brand-cta-end) 0%, var(--brand-cta-start) 100%);
+  background-color: transparent;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+:where(button, a, input, select, textarea, summary, [role="button"]):focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+input,
+textarea,
+select {
+  color-scheme: inherit;
+}
+
+video {
+  background-color: #000;
+}
+
+@media (pointer: fine) {
+  .dark ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: var(--line-strong);
+    border-radius: 8px;
+  }
+  .dark ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* -------------------------------------------------------------
+   Animations. Keyframes + reusable utility classes used across
+   the app to add motion to activities, banners, and lists.
+   ------------------------------------------------------------- */
+
+@keyframes ls-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes ls-fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ls-slide-in-right {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes ls-pop {
+  0%   { transform: scale(0.92); opacity: 0; }
+  60%  { transform: scale(1.04); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+@keyframes ls-bounce-in {
+  0%   { transform: scale(0.5); opacity: 0; }
+  50%  { transform: scale(1.1); opacity: 1; }
+  70%  { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+@keyframes ls-shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(6px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(4px); }
+}
+
+@keyframes ls-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes ls-gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes ls-confetti-pop {
+  0%   { transform: translateY(0) scale(0.6); opacity: 0; }
+  40%  { transform: translateY(-8px) scale(1.1); opacity: 1; }
+  100% { transform: translateY(-24px) scale(1); opacity: 0; }
+}
+
+@keyframes ls-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+
+@keyframes ls-pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(20, 65, 111, 0.45); }
+  70%  { box-shadow: 0 0 0 12px rgba(20, 65, 111, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(20, 65, 111, 0); }
+}
+
+.animate-fade-in    { animation: ls-fade-in 300ms ease-out both; }
+.animate-fade-up    { animation: ls-fade-up 380ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-slide-in-r { animation: ls-slide-in-right 320ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-pop        { animation: ls-pop 260ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.animate-bounce-in  { animation: ls-bounce-in 520ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.animate-shake      { animation: ls-shake 380ms ease-in-out; }
+.animate-float      { animation: ls-float 3.2s ease-in-out infinite; }
+.animate-pulse-ring { animation: ls-pulse-ring 1.6s cubic-bezier(0.66, 0, 0, 1) infinite; }
+
+/* Staggered list entrance — apply to a parent and children fade-up in order. */
+.stagger-children > *          { animation: ls-fade-up 380ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.stagger-children > *:nth-child(1) { animation-delay: 40ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 90ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 140ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 190ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 240ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 290ms; }
+.stagger-children > *:nth-child(n+7) { animation-delay: 340ms; }
+
+/* Buttons and cards get a soft lift on hover. Opt-in via .hover-lift. */
+.hover-lift {
+  transition:
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-pop);
+}
+.hover-lift:active {
+  transform: translateY(0);
+}
+
+/* Shimmer skeleton for loading blocks. */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--muted) 0%,
+    var(--surface) 50%,
+    var(--muted) 100%
+  );
+  background-size: 200% 100%;
+  animation: ls-shimmer 1.6s ease-in-out infinite;
+}
+
+/* Animated brand gradient used for hero cards / flashcards. */
+.bg-brand-gradient {
+  background: linear-gradient(
+    135deg,
+    #f9a8d4 0%,
+    var(--brand-500) 50%,
+    #a78bfa 100%
+  );
+  background-size: 220% 220%;
+  animation: ls-gradient-shift 12s ease infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

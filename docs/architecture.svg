@@ -1,0 +1,215 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 660" role="img" aria-labelledby="title desc" font-family="ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <title id="title">LearnSphere services and data flow</title>
+  <desc id="desc">Animated diagram of the LearnSphere system showing the frontend service (React on Render Static), the backend service (FastAPI on Render Docker), Google OAuth, the MySQL database on an Azure VM, and the Azure Blob Storage container, including which data each component stores or transfers.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+
+    <radialGradient id="glow-blue" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#60a5fa" stop-opacity="1"/>
+      <stop offset="1" stop-color="#60a5fa" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow-emerald" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#34d399" stop-opacity="1"/>
+      <stop offset="1" stop-color="#34d399" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow-amber" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fbbf24" stop-opacity="1"/>
+      <stop offset="1" stop-color="#fbbf24" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow-violet" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#a78bfa" stop-opacity="1"/>
+      <stop offset="1" stop-color="#a78bfa" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow-cyan" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity="1"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow-pink" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#f472b6" stop-opacity="1"/>
+      <stop offset="1" stop-color="#f472b6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="960" height="660" fill="url(#bg)"/>
+
+  <text x="40" y="44" fill="#e2e8f0" font-size="22" font-weight="700">LearnSphere — services &amp; data flow</text>
+  <text x="40" y="68" fill="#94a3b8" font-size="13">Two Render services (frontend + backend) talking to Google OAuth, MySQL on an Azure VM, and an Azure Blob Storage container.</text>
+
+  <!-- Provider groupings -->
+  <g>
+    <rect x="210" y="120" width="500" height="310" rx="14" fill="#0f172a" stroke="#1f2937" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text x="225" y="142" fill="#475569" font-size="11" font-weight="700" letter-spacing="1.5">RENDER</text>
+  </g>
+  <g>
+    <rect x="210" y="460" width="700" height="170" rx="14" fill="#0f172a" stroke="#1f2937" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text x="225" y="482" fill="#475569" font-size="11" font-weight="700" letter-spacing="1.5">AZURE</text>
+  </g>
+
+  <!-- Connection paths -->
+  <path id="p-browser-frontend" d="M180,290 L260,290" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path id="p-frontend-backend" d="M430,290 L500,290" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path id="p-backend-google" d="M620,270 C690,220 730,200 770,180" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path id="p-backend-mysql" d="M540,350 C520,400 470,440 440,490" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path id="p-backend-blob" d="M620,350 C660,390 700,430 720,490" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path id="p-blob-browser" d="M620,580 C400,640 200,560 110,330" stroke="#334155" stroke-width="2" stroke-dasharray="4 4" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- Edge labels -->
+  <text x="185" y="282" fill="#94a3b8" font-size="11">HTTPS</text>
+  <text x="435" y="282" fill="#94a3b8" font-size="11">axios /api/v1/*</text>
+  <text x="688" y="218" fill="#94a3b8" font-size="11">verify id_token</text>
+  <text x="468" y="410" fill="#94a3b8" font-size="11">SQLAlchemy</text>
+  <text x="468" y="424" fill="#64748b" font-size="10">read/write metadata</text>
+  <text x="660" y="410" fill="#94a3b8" font-size="11">upload + sign</text>
+  <text x="660" y="424" fill="#64748b" font-size="10">PUT blob / GET SAS</text>
+  <text x="305" y="625" fill="#64748b" font-size="11" font-style="italic">302 → browser streams video bytes direct from Azure Blob</text>
+
+  <!-- Browser -->
+  <g>
+    <rect x="40" y="250" width="140" height="80" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+    <text x="110" y="282" text-anchor="middle" fill="#e2e8f0" font-size="14" font-weight="600">Browser</text>
+    <text x="110" y="302" text-anchor="middle" fill="#94a3b8" font-size="11">learner / instructor</text>
+    <text x="110" y="318" text-anchor="middle" fill="#64748b" font-size="10">Google sign-in · uploads</text>
+  </g>
+
+  <!-- Frontend Service -->
+  <g>
+    <rect x="260" y="220" width="170" height="135" rx="10" fill="#1e293b" stroke="#60a5fa" stroke-width="2"/>
+    <path d="M260,230 a10,10 0 0 1 10,-10 h150 a10,10 0 0 1 10,10 v12 h-170 z" fill="#1e3a8a"/>
+    <text x="345" y="236" text-anchor="middle" fill="#bfdbfe" font-size="10" font-weight="700" letter-spacing="1">FRONTEND SERVICE</text>
+    <text x="345" y="266" text-anchor="middle" fill="#e2e8f0" font-size="14" font-weight="600">React (Vite)</text>
+    <text x="345" y="284" text-anchor="middle" fill="#94a3b8" font-size="11">Render Static Site</text>
+    <text x="345" y="304" text-anchor="middle" fill="#64748b" font-size="10">React Router v7</text>
+    <text x="345" y="318" text-anchor="middle" fill="#64748b" font-size="10">Tailwind v4 · axios</text>
+    <text x="345" y="338" text-anchor="middle" fill="#64748b" font-size="10" font-style="italic">serves HTML / JS / CSS</text>
+  </g>
+
+  <!-- Backend Service -->
+  <g>
+    <rect x="500" y="220" width="180" height="135" rx="10" fill="#1e293b" stroke="#34d399" stroke-width="2"/>
+    <path d="M500,230 a10,10 0 0 1 10,-10 h160 a10,10 0 0 1 10,10 v12 h-180 z" fill="#064e3b"/>
+    <text x="590" y="236" text-anchor="middle" fill="#bbf7d0" font-size="10" font-weight="700" letter-spacing="1">BACKEND SERVICE</text>
+    <text x="590" y="266" text-anchor="middle" fill="#e2e8f0" font-size="14" font-weight="600">FastAPI</text>
+    <text x="590" y="284" text-anchor="middle" fill="#94a3b8" font-size="11">Render Web Service (Docker)</text>
+    <text x="590" y="304" text-anchor="middle" fill="#64748b" font-size="10">routers → services → repos</text>
+    <text x="590" y="318" text-anchor="middle" fill="#64748b" font-size="10">JWT auth · Alembic migrations</text>
+    <text x="590" y="338" text-anchor="middle" fill="#64748b" font-size="10" font-style="italic">issues SAS URLs for video</text>
+  </g>
+
+  <!-- Google OAuth -->
+  <g>
+    <rect x="740" y="135" width="180" height="80" rx="10" fill="#1e293b" stroke="#fbbf24" stroke-width="2"/>
+    <text x="830" y="165" text-anchor="middle" fill="#e2e8f0" font-size="14" font-weight="600">Google OAuth</text>
+    <text x="830" y="183" text-anchor="middle" fill="#94a3b8" font-size="11">ID-token verify</text>
+    <text x="830" y="200" text-anchor="middle" fill="#64748b" font-size="10">no data stored</text>
+  </g>
+
+  <!-- MySQL -->
+  <g>
+    <rect x="240" y="490" width="240" height="125" rx="10" fill="#1e293b" stroke="#a78bfa" stroke-width="2"/>
+    <text x="360" y="516" text-anchor="middle" fill="#e2e8f0" font-size="14" font-weight="600">MySQL 8</text>
+    <text x="360" y="533" text-anchor="middle" fill="#94a3b8" font-size="11">Azure Ubuntu VM · :3306</text>
+    <text x="252" y="556" fill="#64748b" font-size="10" font-weight="600" letter-spacing="0.5">STORES</text>
+    <text x="252" y="571" fill="#cbd5e1" font-size="10">• users (Google ID, role)</text>
+    <text x="252" y="585" fill="#cbd5e1" font-size="10">• courses · sections · quizzes</text>
+    <text x="252" y="599" fill="#cbd5e1" font-size="10">• enrollments · progress</text>
+    <text x="252" y="613" fill="#cbd5e1" font-size="10">• video metadata (object keys)</text>
+  </g>
+
+  <!-- Azure Blob -->
+  <g>
+    <rect x="540" y="490" width="280" height="125" rx="10" fill="#1e293b" stroke="#06b6d4" stroke-width="2"/>
+    <text x="680" y="516" text-anchor="middle" fill="#e2e8f0" font-size="14" font-weight="600">Azure Blob Storage</text>
+    <text x="680" y="533" text-anchor="middle" fill="#94a3b8" font-size="11">container: learnsphere-videos</text>
+    <text x="552" y="556" fill="#64748b" font-size="10" font-weight="600" letter-spacing="0.5">STORES</text>
+    <text x="552" y="571" fill="#cbd5e1" font-size="10">• raw video files (mp4 / webm / mov)</text>
+    <text x="552" y="585" fill="#cbd5e1" font-size="10">• layout: videos/&lt;course&gt;/&lt;section&gt;/&lt;file&gt;</text>
+    <text x="552" y="599" fill="#cbd5e1" font-size="10">• private — backend issues SAS reads</text>
+    <text x="552" y="613" fill="#cbd5e1" font-size="10">• uploaded by instructors only</text>
+  </g>
+
+  <!-- Animated packets -->
+  <!-- HTTP request chain: Browser → Frontend → Backend -->
+  <circle r="7" fill="url(#glow-blue)">
+    <animateMotion dur="6s" repeatCount="indefinite" begin="0s">
+      <mpath href="#p-browser-frontend"/>
+    </animateMotion>
+  </circle>
+  <circle r="7" fill="url(#glow-blue)">
+    <animateMotion dur="6s" repeatCount="indefinite" begin="0.6s">
+      <mpath href="#p-frontend-backend"/>
+    </animateMotion>
+  </circle>
+
+  <!-- OAuth round trip -->
+  <circle r="6" fill="url(#glow-amber)">
+    <animateMotion dur="6s" repeatCount="indefinite" begin="1.3s">
+      <mpath href="#p-backend-google"/>
+    </animateMotion>
+  </circle>
+  <circle r="6" fill="url(#glow-amber)">
+    <animateMotion dur="6s" repeatCount="indefinite" begin="2.3s" keyPoints="1;0" keyTimes="0;1" calcMode="linear">
+      <mpath href="#p-backend-google"/>
+    </animateMotion>
+  </circle>
+
+  <!-- MySQL r/w -->
+  <circle r="6" fill="url(#glow-violet)">
+    <animateMotion dur="6s" repeatCount="indefinite" begin="2s">
+      <mpath href="#p-backend-mysql"/>
+    </animateMotion>
+  </circle>
+  <circle r="6" fill="url(#glow-violet)">
+    <animateMotion dur="6s" repeatCount="indefinite" begin="3.5s" keyPoints="1;0" keyTimes="0;1" calcMode="linear">
+      <mpath href="#p-backend-mysql"/>
+    </animateMotion>
+  </circle>
+
+  <!-- Video upload (Backend → Blob) -->
+  <circle r="7" fill="url(#glow-pink)">
+    <animateMotion dur="6s" repeatCount="indefinite" begin="2.7s">
+      <mpath href="#p-backend-blob"/>
+    </animateMotion>
+  </circle>
+  <!-- SAS URL response (Blob → Backend) -->
+  <circle r="6" fill="url(#glow-emerald)">
+    <animateMotion dur="6s" repeatCount="indefinite" begin="4.2s" keyPoints="1;0" keyTimes="0;1" calcMode="linear">
+      <mpath href="#p-backend-blob"/>
+    </animateMotion>
+  </circle>
+
+  <!-- Direct stream Blob → Browser -->
+  <circle r="7" fill="url(#glow-cyan)">
+    <animateMotion dur="7s" repeatCount="indefinite" begin="4.8s">
+      <mpath href="#p-blob-browser"/>
+    </animateMotion>
+  </circle>
+
+  <!-- Legend -->
+  <g transform="translate(40, 648)" font-size="11">
+    <circle r="5" cx="0" cy="0" fill="url(#glow-blue)"/>
+    <text x="12" y="4" fill="#94a3b8">HTTP request</text>
+
+    <circle r="5" cx="110" cy="0" fill="url(#glow-amber)"/>
+    <text x="122" y="4" fill="#94a3b8">OAuth verify</text>
+
+    <circle r="5" cx="225" cy="0" fill="url(#glow-violet)"/>
+    <text x="237" y="4" fill="#94a3b8">SQL r/w</text>
+
+    <circle r="5" cx="310" cy="0" fill="url(#glow-pink)"/>
+    <text x="322" y="4" fill="#94a3b8">video upload</text>
+
+    <circle r="5" cx="430" cy="0" fill="url(#glow-emerald)"/>
+    <text x="442" y="4" fill="#94a3b8">SAS URL</text>
+
+    <circle r="5" cx="525" cy="0" fill="url(#glow-cyan)"/>
+    <text x="537" y="4" fill="#94a3b8">video stream</text>
+  </g>
+</svg>

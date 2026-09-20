@@ -1,0 +1,88 @@
+# Render blueprint — https://render.com/docs/blueprint-spec
+#
+# Deploys two services from a single repo:
+#   1. learnsphere-backend  — Dockerised FastAPI app (uses backend/Dockerfile)
+#   2. learnsphere-frontend — Static site built with Vite
+#
+# Secrets (sync: false) must be set in the Render dashboard after first apply.
+# Required: DATABASE_URL, GOOGLE_CLIENT_ID, ADMIN_EMAILS, CORS_ORIGINS,
+#           CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET,
+#           VITE_API_BASE_URL, VITE_GOOGLE_CLIENT_ID.
+
+services:
+  - type: web
+    name: learnsphere-backend
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /api/v1/health/live
+    autoDeploy: true
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: LOG_JSON
+        value: "true"
+      # Disable on-startup disk scan: production catalog lives in MySQL only.
+      - key: AUTO_SEED_ON_STARTUP
+        value: "false"
+      - key: AUTO_SEED_PRUNE_MISSING
+        value: "false"
+      # Pick one: local | cloudinary
+      - key: STORAGE_BACKEND
+        value: cloudinary
+      - key: JWT_EXPIRE_MINUTES
+        value: "10080"
+      - key: JWT_SECRET
+        generateValue: true
+      # MySQL connection string. Format:
+      #   mysql://USER:PASSWORD@HOST:3306/DBNAME
+      # (Works with Azure VM MySQL, PlanetScale, Aiven, etc. The backend
+      # normalises the URL and auto-enables TLS for known managed hosts;
+      # set DB_SSL=true manually for self-hosted MySQL with TLS.)
+      - key: DATABASE_URL
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: ADMIN_EMAILS
+        sync: false
+      # Comma-separated frontend origins, e.g.
+      # https://learnsphere-frontend.onrender.com
+      - key: CORS_ORIGINS
+        sync: false
+      # --- Cloudinary (only used when STORAGE_BACKEND=cloudinary) ---
+      # Get these from https://cloudinary.com/console/settings/api-keys
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+
+  - type: web
+    name: learnsphere-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    autoDeploy: true
+    pullRequestPreviewsEnabled: false
+    # SPA fallback so React Router deep links resolve.
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+    envVars:
+      # Full URL of the backend service, e.g.
+      # https://learnsphere-backend.onrender.com/api/v1
+      - key: VITE_API_BASE_URL
+        sync: false
+      - key: VITE_GOOGLE_CLIENT_ID
+        sync: false

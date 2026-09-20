@@ -1,0 +1,10 @@
+<svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Excelra">
+  <!--
+    Placeholder Excelra wordmark.
+    Swap this file with the official brand asset at any time —
+    every place that references the logo points at this same file.
+  -->
+  <rect x="0" y="4" width="40" height="40" rx="10" fill="#0B2E59"/>
+  <path d="M12 15h18M12 24h14M12 33h18" stroke="#ffffff" stroke-width="3.4" stroke-linecap="round"/>
+  <text x="50" y="33" font-family="'Segoe UI', Arial, sans-serif" font-size="26" font-weight="700" letter-spacing="0.2" fill="#0B2E59">excelra</text>
+</svg>
